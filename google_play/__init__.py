@@ -25,9 +25,16 @@ def _get_apps(url):
         return None
 
     apps = []
+
     soup = BeautifulSoup(r.content, "lxml")
-    for elem in soup.find_all('div', 'card'):
-        apps.append(elem.attrs['data-docid'])
+    for elem in soup.find_all('div', 'card-content'):
+        app = dict()
+        app['pkg'] = elem.attrs['data-docid']
+        q = elem.find('img', 'cover-image')
+        app['icon'] = q.attrs['src']
+        app['title'] = q.attrs['alt']
+
+        apps.append(app)
 
     return apps
 
