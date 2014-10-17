@@ -34,6 +34,13 @@ def _get_apps(url):
         app['icon'] = q.attrs['src']
         app['title'] = q.attrs['alt']
 
+        desc = elem.find('div', 'description').text
+        app['description'] = (desc[:200] + '...') if len(desc) > 200 else desc
+       
+        rating = soup.find('div', 'tiny-star star-rating-non-editable-container')
+        rating = float(re.search(r'\d+', rating.attrs['aria-label']).group())
+        app['rating'] = rating
+
         apps.append(app)
 
     return apps
